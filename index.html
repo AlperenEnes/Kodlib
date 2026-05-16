@@ -1,0 +1,389 @@
+<html>
+  <head>
+    <title>Kodlib</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+  </head>
+
+  <body>
+<!-- #region Navigation / Left -->
+    <div class="categories div height">
+      <div class="navigation div height">
+        <!--
+        <div class="svg ">
+
+          <div class="popup"> </div>
+        </div>
+        -->
+
+        <div class="svg list-toggle" onclick="toggleList()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+            <div class="popup-list-toggle">Listeyi aç/kapat</div>
+        </div>
+
+        <div class="svg all-codes">
+          <svg viewBox="0 0 24 24" fill="currentColor"  >
+            <path d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657 1.414 1.414L2.828 12z" />
+          </svg>
+          <div class="popup-all-codes">Tüm Kodlar</div>
+        </div>
+
+        <div class="svg favorites">
+          <svg viewBox="0 0 24 24" fill="currentColor"  >
+            <path d="M12 18.26l-7.053 3.948 1.575-7.928L.588 8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773 3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.573 3.573 3.305-.949 4.773L12 15.968z" />
+          </svg>
+          <div class="popup-favorites">Favoriler</div>
+        </div>
+
+        <div class="svg history">
+          <svg   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12H4C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C9.25022 4 6.82447 5.38734 5.38451 7.50024L8 7.5V9.5H2V3.5H4L3.99989 5.99918C5.82434 3.57075 8.72873 2 12 2ZM13 7L12.9998 11.585L16.2426 14.8284L14.8284 16.2426L10.9998 12.413L11 7H13Z"></path></svg>
+          <div class="popup-history">Geçmiş</div>
+        </div>
+
+        <div class="svg create-snippet btn-panel" data-target="panel-new-snippet">
+          <svg viewBox="0 0 24 24" fill="currentColor"  >
+            <path d="M13 11h9v2h-9v9h-2v-9H2v-2h9V2h2v9z" />
+          </svg>
+          <div class="popup-create-snippet">Yeni Kod Oluştur</div>
+        </div>
+      </div>
+      <div class="utility div height">
+
+        <div class="svg import btn-panel" data-target="panel-import">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3V15M12 15L8 11M12 15L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="popup-import">İçe Aktar</div>
+        </div>
+
+        <div class="svg export btn-panel" data-target="panel-export">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="popup-export">Dışa Aktar</div>
+        </div>
+
+        <div class="svg color-palette btn-panel" data-target="panel-color-palette">
+          <svg   viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2c5.522 0 10 3.978 10 8.889 0 3.067-2.489 5.555-5.556 5.555h-1.966c-.922 0-1.667.745-1.667 1.667 0 .422.167.811.422 1.1.267.3.434.689.434 1.122 0 .922-.767 1.667-1.667 1.667-5.522 0-10-4.478-10-10S6.478 2 12 2zm-1.189 16.111c0-2.027 1.64-3.667 3.667-3.667h1.966c1.962 0 3.556-1.593 3.556-3.555 0-3.75-3.532-6.889-8-6.889-4.418 0-8 3.582-8 8 0 4.19 3.223 7.629 7.324 7.972-.329-.555-.513-1.196-.513-1.861zM7.5 12a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm9 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM12 9a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
+          </svg>
+          <div class="popup-color-palette">Renk Paleti</div>
+        </div>
+
+        <div class="svg theme-toggle" onclick="btnThemeToggle()">
+          <svg id="theme0" class="vis" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 7c0 3.866 3.134 7 7 7 1.958 0 3.729-.804 5-2.1.001.034.001.067.001.1 0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2c.034 0 .067.001.1.001A6.99 6.99 0 0010 7ZM4 12c0 4.418 3.582 8 8 8 3.058 0 5.716-1.716 7.062-4.238A7.99 7.99 0 0117 16c-4.97 0-9-4.03-9-9 0-.703.081-1.395.238-2.062A8.001 8.001 0 004 12Z"/>
+          </svg> 
+          <svg id="theme1" class="invis" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 18c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6zm0-2a4 4 0 100-8 4 4 0 000 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.929zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+          </svg>         
+          <svg id="theme2" class="invis" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm-5-7h9v2h-4v3l-5-5zm5-4V6l5 5H8V9h4z"/>
+          </svg>
+            <div class="popup-theme-toggle">Tema Değiştir</div>
+        </div>
+
+        <div class="svg profile btn-panel" data-target="panel-profile">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 17c3.662 0 6.865 1.575 8.607 3.925l-1.842.871C17.347 20.116 14.847 19 12 19c-2.847 0-5.347 1.116-6.765 2.796l-1.841-.872C5.136 18.575 8.338 17 12 17zm0-15c2.761 0 5 2.239 5 5v3c0 2.761-2.239 5-5 5s-5-2.239-5-5V7c0-2.761 2.239-5 5-5zm0 2c-1.657 0-3 1.343-3 3v3c0 1.657 1.343 3 3 3s3-1.343 3-3V7c0-1.657-1.343-3-3-3z"/>
+          </svg>
+          <div class="popup-profile">Profil</div>
+        </div>
+
+      </div>
+    </div>
+<!-- #endregion -->
+
+<!-- #region Menu / Middle -->
+    <div class="menu div height" id="menu">
+      <input class="searchbar" type="text" placeholder="Ara...">
+      <ul class="list height">
+        <li>Bubble Sort</li>
+        <li>Test Item</li>
+      </ul>
+    </div>
+<!-- #endregion -->
+
+<!-- #region Content / Right -->
+    <div class="content div height">
+      <div id="head">
+        <svg style="height:25px; width:25px;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <h1>Kodlib</h1>
+      </div>
+      <div id="description">
+        <p>
+          C# Kod Kütüphanesi, Kodlib, C# programcıları için geniş bir koleksiyon sunar.
+        </p>
+      </div>
+      <div id="example">
+        <pre>
+          <svg id="btn-copy" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="2" width="12" height="15" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <rect x="4" y="7" width="12" height="15" rx="2" fill="var(--primary-color)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg><code class="language-csharp code">
+using System;
+
+class Program {
+  static void Main() {
+    Console.WriteLine("Hello, Kodlib!");
+  }
+}
+          </code></pre>
+      </div>
+    </div>
+<!-- #endregion -->
+
+<div id="shade" class="invis" onclick="togglePanel('')"></div>
+
+<!-- #region Panels -->
+
+    <!-- #region Import Panel -->
+    <div id="panel-import" class="panel invis">
+      <div id="import-file">
+        <h3>İçe Aktar</h3>
+        <svg style="min-width:48px; min-height:48px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3V15M12 15L8 11M12 15L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      (.json dosyası)
+        <input class="impexp" type="file" accept=".json">
+      </div>
+      *Bu işlem mevcut oturumunuzdaki kodları içeri aktardığınız dosyalarla değiştirecektir.
+      Lütfen devam etmeden önce kodlarınızı yedekleyin.
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Export Panel -->
+    <div id="panel-export" class="panel invis">
+      <div id="export-file">
+        <h3>Dışa Aktar</h3>
+        <svg style="min-width:96px; min-height:96px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      (json dosyası olarak)
+        <button id="export-btn" class="impexp">Dışa Aktar</button>
+      </div>
+        *Bu işlem mevcut oturumunuzdaki kodları bir .json dosyasına kaydedecektir.
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region New Snippet Panel -->
+    <div id="panel-new-snippet" class="panel invis">
+      <div id="new-snippet">
+        <h3>Yeni Kod Oluştur</h3>
+        <input id="new-snippet-title" type="text" placeholder="Başlık">
+        <textarea id="new-snippet-description" placeholder="Açıklama"></textarea>
+        <textarea id="new-snippet-code" placeholder="Kod"></textarea>
+        <div id="snippet-buttons">
+          <div class="svg" id="create-snippet-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"  >
+              <path d="M13 11h9v2h-9v9h-2v-9H2v-2h9V2h2v9z" />
+            </svg>
+            <div class="create-popup">Oluştur</div>
+          </div>
+
+          <div id="create-and-share-btn" class="svg">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 3v2H5v14h14v-5h2v6a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1h6zm7.586 2H13V3h8v8h-2V6.414l-7 7-1.414-1.414L17.586 5z"/>
+            </svg>
+            <div class="create-and-share-popup">Oluştur ve Paylaş</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Color Palette Panel -->
+     <div id="panel-color-palette" class="panel invis">
+      <h3>Renk Paleti</h3>
+      <div class="color-grid">
+        <div class="color-item">
+          <span>Ana Renk</span>
+          <div class="color-swatch" data-color="--primary-color" style="background-color: var(--primary-color);">
+            <input type="color" id="primary-picker" class="color-input">
+          </div>
+        </div>
+        <div class="color-item">
+          <span>İkincil</span>
+          <div class="color-swatch" data-color="--secondary-color" style="background-color: var(--secondary-color);">
+            <input type="color" id="secondary-picker" class="color-input">
+          </div>
+        </div>
+        <div class="color-item">
+          <span>Vurgu</span>
+          <div class="color-swatch" data-color="--highlight-color" style="background-color: var(--highlight-color);">
+            <input type="color" id="highlight-picker" class="color-input">
+          </div>
+        </div>
+        <div class="color-item">
+          <span>Yazı</span>
+          <div class="color-swatch" data-color="--font-color" style="background-color: var(--font-color);">
+            <input type="color" id="font-picker" class="color-input">
+          </div>
+        </div>
+      </div>
+        <div class="color-actions">
+          <button id="reset-colors-btn" onclick="btnResetTheme()">Varsayılan Renkler</button>
+          <button id="apply-colors-btn" onclick="btnApplyColors()">Uygula</button>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Profile Panel -->
+    <div id="panel-profile" class="panel invis">
+
+      <!-- Logged Out State -->
+      <div id="profile-logged-out">
+        <h3>Hesabına Giriş Yap</h3>
+        <p class="profile-subtitle">Kodlarını senkronize etmek ve paylaşmak için giriş yap.</p>
+
+        <div id="profile-login-buttons">
+          <div class="profile-login-btn" id="btn-login-google" onclick="btnLoginGoogle()">
+            <!-- Google Icon -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.064 7.51C4.709 4.241 8.091 2 12 2c2.695 0 4.959.991 6.691 2.605l-2.868 2.868c-1.036-.991-2.355-1.496-3.823-1.496-2.605 0-4.81 1.76-5.596 4.123a5.9 5.9 0 000 3.8c.786 2.364 2.991 4.123 5.596 4.123 1.345 0 2.49-.355 3.386-.955 1.06-.709 1.764-1.768 1.996-3.018H12v-3.868h9.418c.118.654.182 1.336.182 2.045 0 3.046-1.09 5.61-2.981 7.35-1.655 1.527-3.919 2.423-6.619 2.423-3.909 0-7.291-2.241-8.936-5.509A10 10 0 012 12c0-1.614.386-3.141 1.064-4.49z"/>
+            </svg>
+            Google ile Devam Et
+          </div>
+
+          <div class="profile-login-btn" id="btn-login-github" onclick="btnLoginGithub()">
+            <!-- GitHub Icon -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2c-5.525 0-10 4.475-10 10 0 4.425 2.863 8.163 6.838 9.488.5.087.687-.213.687-.475 0-.237-.012-1.025-.012-1.862-2.513.462-3.163-.613-3.363-1.175-.112-.288-.6-1.175-1.025-1.413-.35-.187-.85-.65-.012-.662.787-.013 1.35.725 1.537 1.025.9 1.512 2.338 1.087 2.913.825.087-.65.35-1.087.637-1.337-2.225-.25-4.55-1.113-4.55-4.938 0-1.087.387-1.987 1.025-2.687-.1-.25-.45-1.275.1-2.65 0 0 .837-.262 2.75 1.025A9.28 9.28 0 0112 6.825c.85 0 1.7.112 2.5.337 1.913-1.3 2.75-1.025 2.75-1.025.55 1.375.2 2.4.1 2.65.638.7 1.025 1.587 1.025 2.687 0 3.838-2.337 4.688-4.562 4.938.362.312.675.912.675 1.85 0 1.337-.013 2.412-.013 2.75 0 .262.188.575.688.475A10.005 10.005 0 0022 12c0-5.525-4.475-10-10-10z"/>
+            </svg>
+            GitHub ile Devam Et
+          </div>
+        </div>
+      </div>
+
+      <!-- Logged In State -->
+      <div id="profile-logged-in" class="invis">
+        <div id="profile-avatar-row">
+          <div id="profile-avatar">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 17c3.662 0 6.865 1.575 8.607 3.925l-1.842.871C17.347 20.116 14.847 19 12 19c-2.847 0-5.347 1.116-6.765 2.796l-1.841-.872C5.136 18.575 8.338 17 12 17zm0-15c2.761 0 5 2.239 5 5v3c0 2.761-2.239 5-5 5s-5-2.239-5-5V7c0-2.761 2.239-5 5-5zm0 2c-1.657 0-3 1.343-3 3v3c0 1.657 1.343 3 3 3s3-1.343 3-3V7c0-1.657-1.343-3-3-3z"/>
+            </svg>
+          </div>
+          <div id="profile-info">
+            <span id="profile-username">Kullanıcı Adı</span>
+            <span id="profile-email">kullanici@email.com</span>
+          </div>
+        </div>
+
+        <hr class="profile-divider">
+
+        <div id="profile-stats">
+          <div class="profile-stat">
+            <span class="stat-value" id="stat-snippets">0</span>
+            <span class="stat-label">Kod</span>
+          </div>
+          <div class="profile-stat">
+            <span class="stat-value" id="stat-favorites">0</span>
+            <span class="stat-label">Favori</span>
+          </div>
+        </div>
+
+        <hr class="profile-divider">
+
+        <div class="profile-login-btn" id="btn-logout" onclick="btnLogout()">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 22a1 1 0 01-1-1V3a1 1 0 011-1h14a1 1 0 011 1v3h-2V4H6v16h13v-2h2v3a1 1 0 01-1 1H5zm13-6v-3h-7v-2h7V8l5 4-5 4z"/>
+          </svg>
+          Çıkış Yap
+        </div>
+      </div>
+
+    </div>
+    <!-- #endregion -->
+
+<!-- #endregion -->
+
+<!--#region Firebase-->
+<script type="module">
+  import { initializeApp }        from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getAnalytics }         from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    GithubAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCi0llj_fMvbHcYjMtKcYgTcKi4IAoSUA4",
+    authDomain: "kodlib-dd693.firebaseapp.com",
+    projectId: "kodlib-dd693",
+    storageBucket: "kodlib-dd693.firebasestorage.app",
+    messagingSenderId: "580851754022",
+    appId: "1:580851754022:web:42c368c6cf51bc951cb2e7",
+    measurementId: "G-WTZSQT59VH"
+  };
+
+  const app       = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth      = getAuth(app);
+  const googleProvider  = new GoogleAuthProvider();
+  const githubProvider  = new GithubAuthProvider();
+
+  // --- Auth state listener: single source of truth for the UI ---
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      showLoggedIn({
+        name:   user.displayName,
+        email:  user.email,
+        avatar: user.photoURL
+      });
+    } else {
+      showLoggedOut();
+    }
+  });
+
+  // --- Expose button handlers globally so HTML onclick= still works ---
+  window.btnLoginGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      // onAuthStateChanged will handle the UI update
+    } catch (err) {
+      console.error('Google sign-in error:', err.message);
+    }
+  };
+
+  window.btnLoginGithub = async () => {
+    try {
+      await signInWithPopup(auth, githubProvider);
+      // onAuthStateChanged will handle the UI update
+    } catch (err) {
+      console.error('GitHub sign-in error:', err.message);
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        alert('Bu e-posta adresiyle zaten bir hesap var. Lütfen diğer giriş yöntemini (Google) kullanın.');
+      }
+    }
+  };
+
+  window.btnLogout = async () => {
+    try {
+      await signOut(auth);
+      // onAuthStateChanged will handle the UI update
+    } catch (err) {
+      console.error('Sign-out error:', err.message);
+    }
+  };
+</script>
+<!-- #endregion -->
+  </body>
+  <script src="main.js"></script>
+</html>
