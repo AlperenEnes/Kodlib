@@ -153,7 +153,8 @@ svg{
 .favorites:hover .popup-favorites,
 .history:hover .popup-history,
 .theme-toggle:hover .popup-theme-toggle,
-.profile:hover .popup-profile{
+.profile:hover .popup-profile,
+.own-codes:hover .popup-own-codes{
   width:auto;
   opacity:1;
   visibility: visible;
@@ -222,7 +223,7 @@ svg{
 }
 .list>li:hover{
   background-color: var(--secondary-color);
-  border-left-color: var(--highlight-color);
+  border-left-color: var(--highlight-color)!important;
   cursor: pointer;
   padding-left: 28px;
 }
@@ -248,6 +249,12 @@ svg{
   width:100%;
   height:auto;
 }
+#head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
 #head h1{
   margin: 0;
   font-weight: 700;
@@ -256,27 +263,37 @@ svg{
 }
 #example>pre{
   border-radius: 16px;
+  background-color:var(--secondary-color);
+  color:var(--font-color);
   border: 1px solid var(--secondary-color);
   box-shadow: 0 10px 15px -3px var(--primary-color);
   overflow: hidden;
+  position: relative;
 }
 #example>pre>svg{
   margin-top:10px;
   position:absolute;
   right:20px;
   opacity:0;
-  transition:opacity 0.2s ease;
+  transition:0.2s;
+  z-index: 10;
 }
 #example>pre:hover>svg{
   opacity:1;
   cursor:pointer;
 }
-pre[class*="language-"] {
-  background-color:var(--secondary-color);
-  filter:contrast(1.4);
-  border-radius: 8px;
-  padding-left:10px;
-  border: 1px solid var(--secondary-color);
+
+/* Force Prism theme to match Kodlib theme variables */
+#example code[class*="language-"],
+#example pre[class*="language-"] {
+  color: var(--font-color) !important;
+  text-shadow: none !important;
+}
+
+#example .token.punctuation {
+  color: var(--font-color) !important;
+  opacity: 0.75;
+  text-shadow: none !important;
 }
 
 /* #endregion */
@@ -385,7 +402,7 @@ pre[class*="language-"] {
 #panel-new-snippet{
   width:30%
 }
-#new-snippet-title,#new-snippet-description,#new-snippet-code{
+#new-snippet-title,#new-snippet-description,#new-snippet-code,#new-snippet-language{
   background-color: var(--secondary-color);
   color: var(--font-color);
   border: 1px solid var(--highlight-color);
@@ -416,17 +433,32 @@ pre[class*="language-"] {
   resize: none;
 }
 
+#new-snippet-language{
+  height: 48px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2338bdf8' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px !important;
+}
+
+#new-snippet-language option{
+  background-color: var(--primary-color);
+  color: var(--font-color);
+}
+
 #new-snippet-code{
   height: 200px;
   resize: none;
   font-family: 'JetBrains Mono', monospace;
 }
 
-#new-snippet-title:hover,#new-snippet-description:hover,#new-snippet-code:hover{
+#new-snippet-title:hover,#new-snippet-description:hover,#new-snippet-code:hover,#new-snippet-language:hover{
   border-color: var(--highlight-color);
 }
 
-#new-snippet-title:focus,#new-snippet-description:focus,#new-snippet-code:focus{
+#new-snippet-title:focus,#new-snippet-description:focus,#new-snippet-code:focus,#new-snippet-language:focus{
   outline: none;
   border-color: var(--highlight-color);
   background-color: var(--secondary-color);
@@ -447,9 +479,8 @@ pre[class*="language-"] {
 .create-popup, .create-and-share-popup{
   z-index:100;
   position:absolute;
-  top:120%; /* Position below for panel buttons */
-  bottom: auto;
-  left: 50%;
+  top: 120% !important;
+  left: 50% !important;
   background-color: var(--secondary-color);
   color: var(--font-color);
   padding: 8px 12px;
@@ -479,10 +510,9 @@ pre[class*="language-"] {
   padding: 12px 30px;
   cursor: pointer;
   font-family: 'Outfit';
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
   width: 100%;
   max-width: 150px;
-  transition: transform 0.2s
 }
 
 #new-snippet>div>div:hover{
@@ -560,9 +590,13 @@ input[type="color"] {
   width: 340px;
 }
 
+#profile-logged-out> h3{
+  width:100%;
+  text-align: center;
+}
+
 .profile-subtitle {
-  margin: 0;
-  font-size: 0.88rem;
+  margin-bottom:10px;
   opacity: 0.7;
 }
 
@@ -714,6 +748,72 @@ input[type="color"] {
 #btn-logout:hover {
   background-color: var(--highlight-color);
   opacity: 1;
+}
+/* #endregion */
+
+/* #region Snippet Actions */
+#snippet-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--secondary-color);
+  color: var(--font-color);
+  border: 1px solid var(--highlight-color);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px var(--primary-color);
+}
+
+.action-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--font-color);
+  stroke-width: 2;
+  transition: stroke 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: var(--highlight-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.action-btn:hover svg {
+  stroke: var(--primary-color);
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+/* Delete Button Specific */
+.action-btn.delete {
+  border-color: #ef4444;
+}
+
+.action-btn.delete svg {
+  stroke: #ef4444;
+}
+
+.action-btn.delete:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.action-btn.delete:hover svg {
+  stroke: white;
 }
 /* #endregion */
 

@@ -166,18 +166,24 @@ function btnApplyColors() {
 //#endregion
 
 //#region Copy Snippet
-document.getElementById('btn-copy').addEventListener('click', function(e) {
-    const code = this.parentElement.querySelector('code').innerText.trim();
-    // Find the code block sitting right next to/under this button
+const copyBtn = document.getElementById('btn-copy');
+if (copyBtn) {
+  copyBtn.addEventListener('click', function(e) {
+    const codeEl = this.parentElement.querySelector('code');
+    if (!codeEl) return;
+    const code = codeEl.innerText.trim();
     if (code) {
-    console.log(code,"\nCode snippet has been succesfully copied!");}
+      console.log(code,"\nCode snippet has been succesfully copied!");
+    }
     navigator.clipboard.writeText(code).then(() => {
       const currentColor = this.style.color;
       this.style.color = 'var(--highlight-color)';
       setTimeout(() => {
         this.style.color = currentColor;
-      }, 1000);});
-});
+      }, 1000);
+    });
+  });
+}
 // #endregion
 
 //#region Misc
@@ -210,4 +216,412 @@ function showLoggedOut() {
 
 // btnLoginGoogle, btnLoginGithub and btnLogout are defined in the Firebase module (index.html)
 // and exposed via window.btnLoginGoogle, window.btnLoginGithub, window.btnLogout
+//#endregion
+
+//#region Snippets & Local Storage
+
+const seedSnippets = [
+  {
+    id: "seed-csharp-bubble-sort",
+    title: "Bubble Sort",
+    description: "C# ile klasik kabarcık sıralama algoritması uygulaması.",
+    code: `using System;
+
+class Program {
+    static void BubbleSort(int[] arr) {
+        int n = arr.Length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    static void Main() {
+        int[] arr = { 64, 34, 25, 12, 22, 11, 90 };
+        BubbleSort(arr);
+        Console.WriteLine("Sıralı dizi:");
+        Console.WriteLine(string.Join(", ", arr));
+    }
+}`,
+    language: "csharp",
+    favorite: false,
+    createdByUser: false
+  },
+  {
+    id: "seed-javascript-debounce",
+    title: "Debounce Function",
+    description: "JavaScript high-performance event rate limiter.",
+    code: `function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}`,
+    language: "javascript",
+    favorite: false,
+    createdByUser: false
+  }
+];
+
+// Active filter states
+let currentFilter = 'all'; // 'all', 'favorites', 'own'
+let currentSearch = '';
+
+function getSnippets() {
+  const data = localStorage.getItem('snippets');
+  if (!data) {
+    localStorage.setItem('snippets', JSON.stringify(seedSnippets));
+    return seedSnippets;
+  }
+  return JSON.parse(data);
+}
+
+function saveSnippets(snippets) {
+  localStorage.setItem('snippets', JSON.stringify(snippets));
+  updateStats();
+}
+
+function updateStats() {
+  const snippets = getSnippets();
+  const totalCount = snippets.length;
+  const favCount = snippets.filter(s => s.favorite).length;
+
+  const statSnippetsEl = document.getElementById('stat-snippets');
+  const statFavoritesEl = document.getElementById('stat-favorites');
+
+  if (statSnippetsEl) statSnippetsEl.textContent = totalCount;
+  if (statFavoritesEl) statFavoritesEl.textContent = favCount;
+}
+
+function renderSnippetList() {
+  const snippets = getSnippets();
+  const listEl = document.querySelector('.list');
+  if (!listEl) return;
+
+  listEl.innerHTML = '';
+
+  // Filter snippets
+  let filtered = snippets;
+
+  if (currentFilter === 'favorites') {
+    filtered = filtered.filter(s => s.favorite);
+  } else if (currentFilter === 'own') {
+    filtered = filtered.filter(s => s.createdByUser);
+  } else if (currentFilter === 'history') {
+    const historyIds = JSON.parse(localStorage.getItem('history') || '[]');
+    filtered = historyIds
+      .map(hid => snippets.find(s => s.id === hid))
+      .filter(s => s !== undefined);
+  }
+
+  if (currentSearch.trim() !== '') {
+    const q = currentSearch.toLowerCase();
+    filtered = filtered.filter(s => 
+      s.title.toLowerCase().includes(q) || 
+      (s.description && s.description.toLowerCase().includes(q)) ||
+      s.code.toLowerCase().includes(q)
+    );
+  }
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `<li style="pointer-events: none; opacity: 0.6; font-style: italic; justify-content: center;">Kod bulunamadı</li>`;
+    return;
+  }
+
+  const activeId = localStorage.getItem('activeSnippetId');
+
+  filtered.forEach(snippet => {
+    const li = document.createElement('li');
+    li.textContent = snippet.title;
+    li.setAttribute('data-id', snippet.id);
+    
+    // Highlight if active
+    if (snippet.id === activeId) {
+      li.style.borderLeftColor = 'var(--highlight-color)';
+      li.style.backgroundColor = 'var(--primary-color)';
+      li.style.paddingLeft = '28px';
+    }
+
+    li.addEventListener('click', () => {
+      viewSnippet(snippet.id);
+    });
+
+    listEl.appendChild(li);
+  });
+}
+
+function addToHistory(id) {
+  let history = JSON.parse(localStorage.getItem('history') || '[]');
+  history = history.filter(itemId => itemId !== id);
+  history.unshift(id);
+  if (history.length > 50) {
+    history.pop();
+  }
+  localStorage.setItem('history', JSON.stringify(history));
+}
+
+function viewSnippet(id) {
+  const snippets = getSnippets();
+  const snippet = snippets.find(s => s.id === id);
+  if (!snippet) return;
+
+  localStorage.setItem('activeSnippetId', id);
+  addToHistory(id);
+
+  // Update content panel
+  const titleEl = document.querySelector('#head h1');
+  const descEl = document.querySelector('#description p');
+  const codeEl = document.querySelector('#example pre code');
+  const favoriteStar = document.querySelector('#head svg');
+
+  if (titleEl) titleEl.textContent = snippet.title;
+  if (descEl) descEl.textContent = snippet.description || '';
+  
+  if (codeEl) {
+    codeEl.className = '';
+    codeEl.classList.add(`language-${snippet.language}`, 'code');
+    codeEl.textContent = snippet.code;
+    
+    if (window.Prism) {
+      Prism.highlightElement(codeEl);
+    }
+  }
+
+  // Update favorite star visual status
+  if (favoriteStar) {
+    if (snippet.favorite) {
+      favoriteStar.setAttribute('fill', 'var(--highlight-color)');
+      favoriteStar.style.stroke = 'var(--highlight-color)';
+    } else {
+      favoriteStar.setAttribute('fill', 'none');
+      favoriteStar.style.stroke = 'currentColor';
+    }
+  }
+
+  // Refresh active state in list
+  document.querySelectorAll('.list > li').forEach(li => {
+    const liId = li.getAttribute('data-id');
+    if (liId === id) {
+      li.style.borderLeftColor = 'var(--highlight-color)';
+      li.style.backgroundColor = 'var(--primary-color)';
+      li.style.paddingLeft = '28px';
+    } else {
+      li.style.borderLeftColor = 'transparent';
+      li.style.backgroundColor = 'transparent';
+      li.style.paddingLeft = '24px';
+    }
+  });
+
+  // Show snippet action buttons if user-created
+  const actionsEl = document.getElementById('snippet-actions');
+  if (actionsEl) {
+    if (snippet.createdByUser) {
+      actionsEl.classList.replace('invis', 'vis');
+    } else {
+      actionsEl.classList.replace('vis', 'invis');
+    }
+  }
+}
+
+function toggleFavoriteActive() {
+  const activeId = localStorage.getItem('activeSnippetId');
+  if (!activeId) return;
+
+  const snippets = getSnippets();
+  const snippet = snippets.find(s => s.id === activeId);
+  if (!snippet) return;
+
+  snippet.favorite = !snippet.favorite;
+  saveSnippets(snippets);
+  
+  // Update star visual
+  const favoriteStar = document.querySelector('#head svg');
+  if (favoriteStar) {
+    if (snippet.favorite) {
+      favoriteStar.setAttribute('fill', 'var(--highlight-color)');
+      favoriteStar.style.stroke = 'var(--highlight-color)';
+    } else {
+      favoriteStar.setAttribute('fill', 'none');
+      favoriteStar.style.stroke = 'currentColor';
+    }
+  }
+
+  if (currentFilter === 'favorites') {
+    renderSnippetList();
+  }
+}
+
+// Add event listener for Create Snippet button inside modal
+document.getElementById('create-snippet-btn').addEventListener('click', () => {
+  const title = document.getElementById('new-snippet-title').value.trim();
+  const description = document.getElementById('new-snippet-description').value.trim();
+  const language = document.getElementById('new-snippet-language').value;
+  const code = document.getElementById('new-snippet-code').value.trim();
+
+  if (!title) {
+    alert('Lütfen bir başlık girin!');
+    return;
+  }
+  if (!code) {
+    alert('Lütfen kod içeriğini girin!');
+    return;
+  }
+
+  const newSnippet = {
+    id: Date.now().toString(),
+    title: title,
+    description: description,
+    language: language,
+    code: code,
+    favorite: false,
+    createdByUser: true
+  };
+
+  const snippets = getSnippets();
+  snippets.push(newSnippet);
+  saveSnippets(snippets);
+
+  // Clear inputs
+  document.getElementById('new-snippet-title').value = '';
+  document.getElementById('new-snippet-description').value = '';
+  document.getElementById('new-snippet-language').value = 'csharp';
+  document.getElementById('new-snippet-code').value = '';
+
+  // Close modal
+  togglePanel('');
+
+  // Re-render and select the newly created snippet
+  renderSnippetList();
+  viewSnippet(newSnippet.id);
+});
+
+// Setup Left sidebar category filtering
+document.querySelectorAll('.categories .svg').forEach(cat => {
+  cat.addEventListener('click', () => {
+    if (cat.classList.contains('all-codes')) {
+      currentFilter = 'all';
+      renderSnippetList();
+    } else if (cat.classList.contains('favorites')) {
+      currentFilter = 'favorites';
+      renderSnippetList();
+    } else if (cat.classList.contains('own-codes')) {
+      currentFilter = 'own';
+      renderSnippetList();
+    } else if (cat.classList.contains('history')) {
+      currentFilter = 'history';
+      renderSnippetList();
+    }
+  });
+});
+
+// Setup search bar filtering
+document.querySelector('.searchbar').addEventListener('input', (e) => {
+  currentSearch = e.target.value;
+  renderSnippetList();
+});
+
+// Setup favorite star toggle click listener
+const starEl = document.querySelector('#head svg');
+if (starEl) {
+  starEl.style.cursor = 'pointer';
+  starEl.addEventListener('click', toggleFavoriteActive);
+}
+
+// Setup Share / Publish button click listener
+const publishBtn = document.getElementById('btn-publish');
+if (publishBtn) {
+  publishBtn.addEventListener('click', () => {
+    const activeId = localStorage.getItem('activeSnippetId');
+    if (!activeId) return;
+
+    const snippets = getSnippets();
+    const snippet = snippets.find(s => s.id === activeId);
+    if (!snippet) return;
+
+    // Check if user is logged in
+    const isLoggedIn = document.getElementById('profile-logged-in') && !document.getElementById('profile-logged-in').classList.contains('invis');
+    if (!isLoggedIn) {
+      alert('Kodlarınızı yayınlayabilmek için lütfen önce Profil sekmesinden giriş yapın!');
+      return;
+    }
+
+    alert(`'${snippet.title}' kodunuz başarıyla paylaşıldı ve Kodlib bulutuna yüklendi!`);
+  });
+}
+
+// Setup Delete button click listener
+const deleteBtn = document.getElementById('btn-delete');
+if (deleteBtn) {
+  deleteBtn.addEventListener('click', () => {
+    const activeId = localStorage.getItem('activeSnippetId');
+    if (!activeId) return;
+
+    const snippets = getSnippets();
+    const snippet = snippets.find(s => s.id === activeId);
+    if (!snippet) return;
+
+    const confirmDelete = confirm(`"${snippet.title}" kodunu kalıcı olarak silmek istediğinize emin misiniz?`);
+    if (!confirmDelete) return;
+
+    const updatedSnippets = snippets.filter(s => s.id !== activeId);
+    saveSnippets(updatedSnippets);
+
+    let nextActiveId = null;
+    if (updatedSnippets.length > 0) {
+      nextActiveId = updatedSnippets[0].id;
+      localStorage.setItem('activeSnippetId', nextActiveId);
+    } else {
+      localStorage.removeItem('activeSnippetId');
+    }
+
+    renderSnippetList();
+    
+    if (nextActiveId) {
+      viewSnippet(nextActiveId);
+    } else {
+      // Clear view
+      const titleEl = document.querySelector('#head h1');
+      const descEl = document.querySelector('#description p');
+      const codeEl = document.querySelector('#example pre code');
+      if (titleEl) titleEl.textContent = 'Kodlib';
+      if (descEl) descEl.textContent = 'Henüz hiçbir kod eklenmemiş. Yeni kod oluşturmak için soldaki artı butonuna basabilirsiniz.';
+      if (codeEl) {
+        codeEl.className = 'code';
+        codeEl.textContent = '';
+      }
+      const actionsEl = document.getElementById('snippet-actions');
+      if (actionsEl) {
+        actionsEl.classList.replace('vis', 'invis');
+      }
+    }
+  });
+}
+
+// Initialize Snippet app on DOM load
+window.addEventListener('DOMContentLoaded', () => {
+  const snippets = getSnippets();
+  
+  let activeId = localStorage.getItem('activeSnippetId');
+  if (!activeId && snippets.length > 0) {
+    activeId = snippets[0].id;
+    localStorage.setItem('activeSnippetId', activeId);
+  }
+
+  renderSnippetList();
+  updateStats();
+  if (activeId) {
+    viewSnippet(activeId);
+  }
+});
+
 //#endregion
