@@ -1,20 +1,18 @@
 //#region Panel
 
-// Panel açma işlemi tıklama dinleyicisi
-document.querySelectorAll('.btn-panel').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const targetPanelId = btn.getAttribute('data-target');
-    togglePanel(targetPanelId);
-  })
-});
+// Panel açma işlemi
+function onPanelBtnClick(btn) {
+  const targetPanelId = btn.getAttribute('data-target');
+  togglePanel(targetPanelId);
+}
 
 
 function togglePanel(panelId) {
-  if(panelId==='') {// Panelleri gizle
+  if (panelId === '') {
     document.querySelectorAll('.panel.vis').forEach(p => p.classList.replace('vis', 'invis'));
     document.getElementById('shade').classList.replace('vis', 'invis');
   }
-  else{// Hedef paneli göster
+  else {
     document.getElementById(panelId).classList.replace('invis', 'vis');
     document.getElementById('shade').classList.replace('invis', 'vis');
   }
@@ -24,36 +22,36 @@ function togglePanel(panelId) {
 //#region Color and Theme
 let currentThemeIndex = parseInt(localStorage.getItem('currentThemeIndex') || '0');
 // Tema değiştirme işlemi tıklama dinleyicisi
-const allThemes =[
+const allThemes = [
   {
     name: "dark",
     colors: {
-    '--font-color': '#ffffff',
-    '--primary-color': '#252526',
-    '--secondary-color': '#333333',
-    '--highlight-color': '#0ea5e9'
+      '--font-color': '#ffffff',
+      '--primary-color': '#252526',
+      '--secondary-color': '#333333',
+      '--highlight-color': '#0ea5e9'
     }
   },
   {
     name: "light",
     colors: {
-    '--font-color': '#000000',
-    '--primary-color': '#f5f5f5',
-    '--secondary-color': '#e0e0e0',
-    '--highlight-color': '#0ea5e9'
+      '--font-color': '#000000',
+      '--primary-color': '#f5f5f5',
+      '--secondary-color': '#e0e0e0',
+      '--highlight-color': '#0ea5e9'
     }
   }
 ]
 
 // Temaların localStorage'da olup olmadığını kontrol et ve yoksa ekle
 
-if(!localStorage.getItem('themes')){
+if (!localStorage.getItem('themes')) {
   localStorage.setItem('themes', JSON.stringify(allThemes));
   console.log('Default themes are saved to the localStorage.');
 }
-else{console.log('Themes already exist in the localStorage.');}
+else { console.log('Themes already exist in the localStorage.'); }
 
-function resetThemes(){
+function resetThemes() {
   localStorage.setItem('themes', JSON.stringify(allThemes));
 }
 
@@ -73,7 +71,7 @@ function applyTheme(colors) {
   }
 }
 
-function swapThemeIcon(current, next){
+function swapThemeIcon(current, next) {
   document.getElementById(`theme${current}`).classList.replace('vis', 'invis');
   document.getElementById(`theme${next}`).classList.replace('invis', 'vis');
 }
@@ -97,35 +95,33 @@ function pushCustomTheme(colors) {
     colors: colors
   };
   const themes = JSON.parse(localStorage.getItem('themes')) || [];
-  if(themes.length >= 3){
+  if (themes.length >= 3) {
     themes.pop();
   }
   themes.push(customTheme);
   localStorage.setItem('themes', JSON.stringify(themes));
 }
 
-document.querySelectorAll('.color-swatch').forEach(swatch => {
-  // Renk paleti açma işlemi
-  swatch.addEventListener('click', () => {
-    swatch.querySelector('input[type="color"]').click();
-  });
-  
-  // Rengi temaya uygulama işlemi
-  swatch.querySelector('input[type="color"]').addEventListener('input', (e) => {
-    const colorVar = swatch.getAttribute('data-color');
-    const hexColor = e.target.value;
-    applyTheme({ [colorVar]: hexColor });
-    swatch.style.backgroundColor = hexColor;
-  });
-});
+function onColorSwatchClick(swatch) {
+  swatch.querySelector('input[type="color"]').click();
+}
 
-function btnResetTheme(){
+function onColorPickerInput(input, event) {
+  event.stopPropagation();
+  const swatch = input.closest('.color-swatch');
+  const colorVar = swatch.getAttribute('data-color');
+  const hexColor = input.value;
+  applyTheme({ [colorVar]: hexColor });
+  swatch.style.backgroundColor = hexColor;
+}
+
+function btnResetTheme() {
   resetThemes();
   updateColorSwatches(allThemes[0].colors);
   applyTheme(allThemes[0].colors);
 };
 
-function btnThemeToggle(){
+function btnThemeToggle() {
   const colors = themeToggle();
   applyTheme(colors);
   updateColorSwatches(colors);
@@ -166,28 +162,25 @@ function btnApplyColors() {
 //#endregion
 
 //#region Copy Snippet
-const copyBtn = document.getElementById('btn-copy');
-if (copyBtn) {
-  copyBtn.addEventListener('click', function(e) {
-    const codeEl = this.parentElement.querySelector('code');
-    if (!codeEl) return;
-    const code = codeEl.innerText.trim();
-    if (code) {
-      console.log(code,"\nCode snippet has been succesfully copied!");
-    }
-    navigator.clipboard.writeText(code).then(() => {
-      const currentColor = this.style.color;
-      this.style.color = 'var(--highlight-color)';
-      setTimeout(() => {
-        this.style.color = currentColor;
-      }, 1000);
-    });
+function copyCodeSnippet(btn) {
+  const codeEl = btn.parentElement.querySelector('code');
+  if (!codeEl) return;
+  const code = codeEl.innerText.trim();
+  if (code) {
+    console.log(code, "\nCode snippet has been succesfully copied!");
+  }
+  navigator.clipboard.writeText(code).then(() => {
+    const currentColor = btn.style.color;
+    btn.style.color = 'var(--highlight-color)';
+    setTimeout(() => {
+      btn.style.color = currentColor;
+    }, 1000);
   });
 }
 // #endregion
 
 //#region Misc
-function toggleList(){
+function toggleList() {
   document.getElementById("menu").classList.toggle("menu-collapsed");
 }
 // #endregion
@@ -198,7 +191,7 @@ function showLoggedIn(user) {
   document.getElementById('profile-logged-out').classList.add('invis');
   document.getElementById('profile-logged-in').classList.remove('invis');
   document.getElementById('profile-logged-in').classList.add('vis');
-  if (user.name)  document.getElementById('profile-username').textContent = user.name;
+  if (user.name) document.getElementById('profile-username').textContent = user.name;
   if (user.email) document.getElementById('profile-email').textContent = user.email;
   if (user.avatar) {
     const avatar = document.getElementById('profile-avatar');
@@ -214,8 +207,6 @@ function showLoggedOut() {
   document.getElementById('profile-avatar').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17c3.662 0 6.865 1.575 8.607 3.925l-1.842.871C17.347 20.116 14.847 19 12 19c-2.847 0-5.347 1.116-6.765 2.796l-1.841-.872C5.136 18.575 8.338 17 12 17zm0-15c2.761 0 5 2.239 5 5v3c0 2.761-2.239 5-5 5s-5-2.239-5-5V7c0-2.761 2.239-5 5-5zm0 2c-1.657 0-3 1.343-3 3v3c0 1.657 1.343 3 3 3s3-1.343 3-3V7c0-1.657-1.343-3-3-3z"/></svg>`;
 }
 
-// btnLoginGoogle, btnLoginGithub and btnLogout are defined in the Firebase module (index.html)
-// and exposed via window.btnLoginGoogle, window.btnLoginGithub, window.btnLogout
 //#endregion
 
 //#region Snippets & Local Storage
@@ -303,14 +294,7 @@ function updateStats() {
   if (statFavoritesEl) statFavoritesEl.textContent = favCount;
 }
 
-function renderSnippetList() {
-  const snippets = getSnippets();
-  const listEl = document.querySelector('.list');
-  if (!listEl) return;
-
-  listEl.innerHTML = '';
-
-  // Filter snippets
+function getFilteredSnippets(snippets) {
   let filtered = snippets;
 
   if (currentFilter === 'favorites') {
@@ -326,36 +310,77 @@ function renderSnippetList() {
 
   if (currentSearch.trim() !== '') {
     const q = currentSearch.toLowerCase();
-    filtered = filtered.filter(s => 
-      s.title.toLowerCase().includes(q) || 
+    filtered = filtered.filter(s =>
+      s.title.toLowerCase().includes(q) ||
       (s.description && s.description.toLowerCase().includes(q)) ||
       s.code.toLowerCase().includes(q)
     );
   }
 
+  return filtered;
+}
+
+function createSnippetListItem(snippet, activeId) {
+  const li = document.createElement('li');
+  li.setAttribute('data-id', snippet.id);
+
+  const langColors = {
+    csharp: '#8b5cf6',
+    javascript: '#eab308',
+    python: '#3b82f6',
+    css: '#ec4899'
+  };
+  const langColor = langColors[snippet.language] || 'var(--highlight-color)';
+  li.style.setProperty('--lang-color', langColor);
+
+  const titleSpan = document.createElement('span');
+  titleSpan.className = 'snippet-title-span';
+  titleSpan.textContent = snippet.title;
+  li.appendChild(titleSpan);
+
+  const langMap = {
+    csharp: 'C#',
+    javascript: 'JS',
+    python: 'PY',
+    css: 'CSS'
+  };
+  const langLabel = langMap[snippet.language] || snippet.language.toUpperCase();
+
+  const badgeSpan = document.createElement('span');
+  badgeSpan.className = `lang-badge badge-${snippet.language}`;
+  badgeSpan.textContent = langLabel;
+  li.appendChild(badgeSpan);
+
+  if (snippet.id === activeId) {
+    li.style.borderLeftColor = 'var(--lang-color)';
+    li.style.backgroundColor = 'var(--primary-color)';
+    li.style.paddingLeft = '28px';
+  }
+
+  li.addEventListener('click', () => {
+    viewSnippet(snippet.id);
+  });
+
+  return li;
+}
+
+function renderSnippetList() {
+  const listEl = document.querySelector('.list');
+  if (!listEl) return;
+
+  listEl.innerHTML = '';
+
+  const snippets = getSnippets();
+  const filtered = getFilteredSnippets(snippets);
+
   if (filtered.length === 0) {
-    listEl.innerHTML = `<li style="pointer-events: none; opacity: 0.6; font-style: italic; justify-content: center;">Kod bulunamadı</li>`;
+    listEl.innerHTML = `<li style="pointer-events: none; justify-content: center;">Kod bulunamadı</li>`;
     return;
   }
 
   const activeId = localStorage.getItem('activeSnippetId');
-
   filtered.forEach(snippet => {
-    const li = document.createElement('li');
-    li.textContent = snippet.title;
-    li.setAttribute('data-id', snippet.id);
-    
-    // Highlight if active
-    if (snippet.id === activeId) {
-      li.style.borderLeftColor = 'var(--highlight-color)';
-      li.style.backgroundColor = 'var(--primary-color)';
-      li.style.paddingLeft = '28px';
-    }
-
-    li.addEventListener('click', () => {
-      viewSnippet(snippet.id);
-    });
-
+    const li = createSnippetListItem(snippet, activeId);
     listEl.appendChild(li);
   });
 }
@@ -386,12 +411,12 @@ function viewSnippet(id) {
 
   if (titleEl) titleEl.textContent = snippet.title;
   if (descEl) descEl.textContent = snippet.description || '';
-  
+
   if (codeEl) {
     codeEl.className = '';
     codeEl.classList.add(`language-${snippet.language}`, 'code');
     codeEl.textContent = snippet.code;
-    
+
     if (window.Prism) {
       Prism.highlightElement(codeEl);
     }
@@ -412,7 +437,7 @@ function viewSnippet(id) {
   document.querySelectorAll('.list > li').forEach(li => {
     const liId = li.getAttribute('data-id');
     if (liId === id) {
-      li.style.borderLeftColor = 'var(--highlight-color)';
+      li.style.borderLeftColor = 'var(--lang-color)';
       li.style.backgroundColor = 'var(--primary-color)';
       li.style.paddingLeft = '28px';
     } else {
@@ -443,7 +468,7 @@ function toggleFavoriteActive() {
 
   snippet.favorite = !snippet.favorite;
   saveSnippets(snippets);
-  
+
   // Update star visual
   const favoriteStar = document.querySelector('#head svg');
   if (favoriteStar) {
@@ -462,7 +487,7 @@ function toggleFavoriteActive() {
 }
 
 // Add event listener for Create Snippet button inside modal
-document.getElementById('create-snippet-btn').addEventListener('click', () => {
+function createSnippet() {
   const title = document.getElementById('new-snippet-title').value.trim();
   const description = document.getElementById('new-snippet-description').value.trim();
   const language = document.getElementById('new-snippet-language').value;
@@ -503,114 +528,85 @@ document.getElementById('create-snippet-btn').addEventListener('click', () => {
   // Re-render and select the newly created snippet
   renderSnippetList();
   viewSnippet(newSnippet.id);
-});
-
-// Setup Left sidebar category filtering
-document.querySelectorAll('.categories .svg').forEach(cat => {
-  cat.addEventListener('click', () => {
-    if (cat.classList.contains('all-codes')) {
-      currentFilter = 'all';
-      renderSnippetList();
-    } else if (cat.classList.contains('favorites')) {
-      currentFilter = 'favorites';
-      renderSnippetList();
-    } else if (cat.classList.contains('own-codes')) {
-      currentFilter = 'own';
-      renderSnippetList();
-    } else if (cat.classList.contains('history')) {
-      currentFilter = 'history';
-      renderSnippetList();
-    }
-  });
-});
-
-// Setup search bar filtering
-document.querySelector('.searchbar').addEventListener('input', (e) => {
-  currentSearch = e.target.value;
-  renderSnippetList();
-});
-
-// Setup favorite star toggle click listener
-const starEl = document.querySelector('#head svg');
-if (starEl) {
-  starEl.style.cursor = 'pointer';
-  starEl.addEventListener('click', toggleFavoriteActive);
 }
 
-// Setup Share / Publish button click listener
-const publishBtn = document.getElementById('btn-publish');
-if (publishBtn) {
-  publishBtn.addEventListener('click', () => {
-    const activeId = localStorage.getItem('activeSnippetId');
-    if (!activeId) return;
+function selectCategory(filterType) {
+  currentFilter = filterType;
+  renderSnippetList();
+}
 
-    const snippets = getSnippets();
-    const snippet = snippets.find(s => s.id === activeId);
-    if (!snippet) return;
+function onSearchInput(input) {
+  currentSearch = input.value;
+  renderSnippetList();
+}
 
-    // Check if user is logged in
-    const isLoggedIn = document.getElementById('profile-logged-in') && !document.getElementById('profile-logged-in').classList.contains('invis');
-    if (!isLoggedIn) {
-      alert('Kodlarınızı yayınlayabilmek için lütfen önce Profil sekmesinden giriş yapın!');
-      return;
-    }
+function publishActiveSnippet() {
+  const activeId = localStorage.getItem('activeSnippetId');
+  if (!activeId) return;
 
-    alert(`'${snippet.title}' kodunuz başarıyla paylaşıldı ve Kodlib bulutuna yüklendi!`);
-  });
+  const snippets = getSnippets();
+  const snippet = snippets.find(s => s.id === activeId);
+  if (!snippet) return;
+
+  // Check if user is logged in
+  const isLoggedIn = document.getElementById('profile-logged-in') && !document.getElementById('profile-logged-in').classList.contains('invis');
+  if (!isLoggedIn) {
+    alert('Kodlarınızı yayınlayabilmek için lütfen önce Profil sekmesinden giriş yapın!');
+    return;
+  }
+
+  alert(`'${snippet.title}' kodunuz başarıyla paylaşıldı ve Kodlib bulutuna yüklendi!`);
 }
 
 // Setup Delete button click listener
-const deleteBtn = document.getElementById('btn-delete');
-if (deleteBtn) {
-  deleteBtn.addEventListener('click', () => {
-    const activeId = localStorage.getItem('activeSnippetId');
-    if (!activeId) return;
+function deleteActiveSnippet() {
+  const activeId = localStorage.getItem('activeSnippetId');
+  if (!activeId) return;
 
-    const snippets = getSnippets();
-    const snippet = snippets.find(s => s.id === activeId);
-    if (!snippet) return;
+  const snippets = getSnippets();
+  const snippet = snippets.find(s => s.id === activeId);
+  if (!snippet) return;
 
-    const confirmDelete = confirm(`"${snippet.title}" kodunu kalıcı olarak silmek istediğinize emin misiniz?`);
-    if (!confirmDelete) return;
+  const confirmDelete = confirm(`"${snippet.title}" kodunu kalıcı olarak silmek istediğinize emin misiniz?`);
+  if (!confirmDelete) return;
 
-    const updatedSnippets = snippets.filter(s => s.id !== activeId);
-    saveSnippets(updatedSnippets);
+  const updatedSnippets = snippets.filter(s => s.id !== activeId);
+  saveSnippets(updatedSnippets);
 
-    let nextActiveId = null;
-    if (updatedSnippets.length > 0) {
-      nextActiveId = updatedSnippets[0].id;
-      localStorage.setItem('activeSnippetId', nextActiveId);
-    } else {
-      localStorage.removeItem('activeSnippetId');
+  let nextActiveId = null;
+  if (updatedSnippets.length > 0) {
+    nextActiveId = updatedSnippets[0].id;
+    localStorage.setItem('activeSnippetId', nextActiveId);
+  } else {
+    localStorage.removeItem('activeSnippetId');
+  }
+
+  renderSnippetList();
+
+  if (nextActiveId) {
+    viewSnippet(nextActiveId);
+  } else {
+    // Clear view
+    const titleEl = document.querySelector('#head h1');
+    const descEl = document.querySelector('#description p');
+    const codeEl = document.querySelector('#example pre code');
+    if (titleEl) titleEl.textContent = 'Kodlib';
+    if (descEl) descEl.textContent = 'Henüz hiçbir kod eklenmemiş. Yeni kod oluşturmak için soldaki artı butonuna basabilirsiniz.';
+    if (codeEl) {
+      codeEl.className = 'code';
+      codeEl.textContent = '';
     }
-
-    renderSnippetList();
-    
-    if (nextActiveId) {
-      viewSnippet(nextActiveId);
-    } else {
-      // Clear view
-      const titleEl = document.querySelector('#head h1');
-      const descEl = document.querySelector('#description p');
-      const codeEl = document.querySelector('#example pre code');
-      if (titleEl) titleEl.textContent = 'Kodlib';
-      if (descEl) descEl.textContent = 'Henüz hiçbir kod eklenmemiş. Yeni kod oluşturmak için soldaki artı butonuna basabilirsiniz.';
-      if (codeEl) {
-        codeEl.className = 'code';
-        codeEl.textContent = '';
-      }
-      const actionsEl = document.getElementById('snippet-actions');
-      if (actionsEl) {
-        actionsEl.classList.replace('vis', 'invis');
-      }
+    const actionsEl = document.getElementById('snippet-actions');
+    if (actionsEl) {
+      actionsEl.classList.replace('vis', 'invis');
     }
-  });
+  }
 }
 
 // Initialize Snippet app on DOM load
 window.addEventListener('DOMContentLoaded', () => {
   const snippets = getSnippets();
-  
+
   let activeId = localStorage.getItem('activeSnippetId');
   if (!activeId && snippets.length > 0) {
     activeId = snippets[0].id;

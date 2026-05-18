@@ -31,33 +31,33 @@
             <div class="popup-list-toggle">Listeyi aç/kapat</div>
         </div>
 
-        <div class="svg all-codes">
+        <div class="svg all-codes" onclick="selectCategory('all')">
           <svg viewBox="0 0 24 24" fill="currentColor"  >
             <path d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657 1.414 1.414L2.828 12z" />
           </svg>
           <div class="popup-all-codes">Tüm Kodlar</div>
         </div>
 
-        <div class="svg favorites">
-          <svg viewBox="0 0 24 24" fill="currentColor"  >
-            <path d="M12 18.26l-7.053 3.948 1.575-7.928L.588 8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773 3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.573 3.573 3.305-.949 4.773L12 15.968z" />
+        <div class="svg favorites" onclick="selectCategory('favorites')">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.6a1 1 0 01.9.6l2.3 5.3 5.7.5a1 1 0 01.6 1.7l-4.3 3.9 1.3 5.6a1 1 0 01-1.5 1.1L12 18.2l-4.9 3.1a1 1 0 01-1.5-1.1l1.3-5.6-4.3-3.9a1 1 0 01.6-1.7l5.7-.5 2.3-5.3a1 1 0 01.9-.6zm0 3.7L10.5 9.4a1 1 0 01-.8.6l-3.8.4 2.9 2.6a1 1 0 01.3.9l-.9 3.7 3.3-2.1a1 1 0 011 0l3.3 2.1-.9-3.7a1 1 0 01.3-.9l2.9-2.6-3.8-.4a1 1 0 01-.8-.6L12 6.3z"/>
           </svg>
           <div class="popup-favorites">Favoriler</div>
         </div>
 
-        <div class="svg history">
+        <div class="svg history" onclick="selectCategory('history')">
           <svg   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12H4C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C9.25022 4 6.82447 5.38734 5.38451 7.50024L8 7.5V9.5H2V3.5H4L3.99989 5.99918C5.82434 3.57075 8.72873 2 12 2ZM13 7L12.9998 11.585L16.2426 14.8284L14.8284 16.2426L10.9998 12.413L11 7H13Z"></path></svg>
           <div class="popup-history">Geçmiş</div>
         </div>
 
-        <div class="svg own-codes">
+        <div class="svg own-codes" onclick="selectCategory('own')">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.414 5H21a1 1 0 011 1v14a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1h7.414l2 2zM4 5v14h16V7h-8.414l-2-2H4zm4 13c0-2.21 1.79-4 4-4s4 1.79 4 4H8zm4-5c1.381 0 2.5-1.119 2.5-2.5S13.381 8 12 8s-2.5 1.119-2.5 2.5 1.119 2.5 2.5 2.5z"/>
           </svg>
           <div class="popup-own-codes">Kendi Kodlarım</div>
         </div>
         
-        <div class="svg create-snippet btn-panel" data-target="panel-new-snippet">
+        <div class="svg create-snippet btn-panel" data-target="panel-new-snippet" onclick="onPanelBtnClick(this)">
           <svg viewBox="0 0 24 24" fill="currentColor"  >
             <path d="M13 11h9v2h-9v9h-2v-9H2v-2h9V2h2v9z" />
           </svg>
@@ -66,7 +66,7 @@
       </div>
       <div class="utility div height">
 
-        <div class="svg import btn-panel" data-target="panel-import">
+        <div class="svg import btn-panel" data-target="panel-import" onclick="onPanelBtnClick(this)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 3V15M12 15L8 11M12 15L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -74,7 +74,7 @@
           <div class="popup-import">İçe Aktar</div>
         </div>
 
-        <div class="svg export btn-panel" data-target="panel-export">
+        <div class="svg export btn-panel" data-target="panel-export" onclick="onPanelBtnClick(this)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -82,7 +82,7 @@
           <div class="popup-export">Dışa Aktar</div>
         </div>
 
-        <div class="svg color-palette btn-panel" data-target="panel-color-palette">
+        <div class="svg color-palette btn-panel" data-target="panel-color-palette" onclick="onPanelBtnClick(this)">
           <svg   viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2c5.522 0 10 3.978 10 8.889 0 3.067-2.489 5.555-5.556 5.555h-1.966c-.922 0-1.667.745-1.667 1.667 0 .422.167.811.422 1.1.267.3.434.689.434 1.122 0 .922-.767 1.667-1.667 1.667-5.522 0-10-4.478-10-10S6.478 2 12 2zm-1.189 16.111c0-2.027 1.64-3.667 3.667-3.667h1.966c1.962 0 3.556-1.593 3.556-3.555 0-3.75-3.532-6.889-8-6.889-4.418 0-8 3.582-8 8 0 4.19 3.223 7.629 7.324 7.972-.329-.555-.513-1.196-.513-1.861zM7.5 12a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm9 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM12 9a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
           </svg>
@@ -102,7 +102,7 @@
             <div class="popup-theme-toggle">Tema Değiştir</div>
         </div>
 
-        <div class="svg profile btn-panel" data-target="panel-profile">
+        <div class="svg profile btn-panel" data-target="panel-profile" onclick="onPanelBtnClick(this)">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 17c3.662 0 6.865 1.575 8.607 3.925l-1.842.871C17.347 20.116 14.847 19 12 19c-2.847 0-5.347 1.116-6.765 2.796l-1.841-.872C5.136 18.575 8.338 17 12 17zm0-15c2.761 0 5 2.239 5 5v3c0 2.761-2.239 5-5 5s-5-2.239-5-5V7c0-2.761 2.239-5 5-5zm0 2c-1.657 0-3 1.343-3 3v3c0 1.657 1.343 3 3 3s3-1.343 3-3V7c0-1.657-1.343-3-3-3z"/>
           </svg>
@@ -115,7 +115,7 @@
 
 <!-- #region Menu / Middle -->
     <div class="menu div height" id="menu">
-      <input class="searchbar" type="text" placeholder="Ara...">
+      <input class="searchbar" type="text" placeholder="Ara..." oninput="onSearchInput(this)">
       <ul class="list height">
       </ul>
     </div>
@@ -124,7 +124,7 @@
 <!-- #region Content / Right -->
     <div class="content div height">
       <div id="head">
-        <svg style="height:25px; width:25px;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg style="height:25px; width:25px; cursor:pointer;" onclick="toggleFavoriteActive()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
         </svg>
         <h1>Kodlib</h1>
@@ -135,7 +135,7 @@
         </p>
       </div>
       <div id="snippet-actions" class="invis">
-        <button id="btn-publish" class="action-btn">
+        <button id="btn-publish" class="action-btn" onclick="publishActiveSnippet()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
             <polyline points="16 6 12 2 8 6"></polyline>
@@ -143,7 +143,7 @@
           </svg>
           Paylaş
         </button>
-        <button id="btn-delete" class="action-btn delete">
+        <button id="btn-delete" class="action-btn delete" onclick="deleteActiveSnippet()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -154,7 +154,7 @@
         </button>
       </div>
       <div id="example">
-        <pre><svg id="btn-copy" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="2" width="12" height="15" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="4" y="7" width="12" height="15" rx="2" fill="var(--secondary-color)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><code class="language-csharp code"></code></pre>
+        <pre><svg id="btn-copy" onclick="copyCodeSnippet(this)" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="2" width="12" height="15" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="4" y="7" width="12" height="15" rx="2" fill="var(--secondary-color)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><code class="language-csharp code"></code></pre>
       </div>
     </div>
 <!-- #endregion -->
@@ -202,15 +202,15 @@
         <input id="new-snippet-title" type="text" placeholder="Başlık">
         <textarea id="new-snippet-description" placeholder="Açıklama"></textarea>
         <select id="new-snippet-language">
+          <selectedcontent>Dil Seç</selectedcontent>
           <option value="csharp">C#</option>
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
-          <option value="html">HTML</option>
           <option value="css">CSS</option>
         </select>
         <textarea id="new-snippet-code" placeholder="Kod"></textarea>
         <div id="snippet-buttons">
-          <div class="svg" id="create-snippet-btn">
+          <div class="svg" id="create-snippet-btn" onclick="createSnippet()">
             <svg viewBox="0 0 24 24" fill="currentColor"  >
               <path d="M13 11h9v2h-9v9h-2v-9H2v-2h9V2h2v9z" />
             </svg>
@@ -234,26 +234,26 @@
       <div class="color-grid">
         <div class="color-item">
           <span>Ana Renk</span>
-          <div class="color-swatch" data-color="--primary-color" style="background-color: var(--primary-color);">
-            <input type="color" id="primary-picker" class="color-input">
+          <div class="color-swatch" data-color="--primary-color" style="background-color: var(--primary-color);" onclick="onColorSwatchClick(this)">
+            <input type="color" id="primary-picker" class="color-input" oninput="onColorPickerInput(this, event)" onclick="event.stopPropagation()">
           </div>
         </div>
         <div class="color-item">
           <span>İkincil</span>
-          <div class="color-swatch" data-color="--secondary-color" style="background-color: var(--secondary-color);">
-            <input type="color" id="secondary-picker" class="color-input">
+          <div class="color-swatch" data-color="--secondary-color" style="background-color: var(--secondary-color);" onclick="onColorSwatchClick(this)">
+            <input type="color" id="secondary-picker" class="color-input" oninput="onColorPickerInput(this, event)" onclick="event.stopPropagation()">
           </div>
         </div>
         <div class="color-item">
           <span>Vurgu</span>
-          <div class="color-swatch" data-color="--highlight-color" style="background-color: var(--highlight-color);">
-            <input type="color" id="highlight-picker" class="color-input">
+          <div class="color-swatch" data-color="--highlight-color" style="background-color: var(--highlight-color);" onclick="onColorSwatchClick(this)">
+            <input type="color" id="highlight-picker" class="color-input" oninput="onColorPickerInput(this, event)" onclick="event.stopPropagation()">
           </div>
         </div>
         <div class="color-item">
           <span>Yazı</span>
-          <div class="color-swatch" data-color="--font-color" style="background-color: var(--font-color);">
-            <input type="color" id="font-picker" class="color-input">
+          <div class="color-swatch" data-color="--font-color" style="background-color: var(--font-color);" onclick="onColorSwatchClick(this)">
+            <input type="color" id="font-picker" class="color-input" oninput="onColorPickerInput(this, event)" onclick="event.stopPropagation()">
           </div>
         </div>
       </div>
